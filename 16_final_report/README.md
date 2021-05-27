@@ -62,7 +62,8 @@ mpirun -n 4 ./a.out
 cacheBlocking_openmp_mpi_smid
 
 ```   
-### Modified the last line to use different techniques.   
+### Modified the last line to use different techniques. and then `sh try.sh`  
+
 
 ## **Analysis**  
 The matrix size N is set to 256, I also check some great model performance to set N size to 4096.  
