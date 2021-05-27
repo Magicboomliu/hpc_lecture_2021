@@ -26,6 +26,10 @@ cacheBlocking_only(){
     g++ cacheblocking.cpp  
     ./a.out
 }
+cacheBlocking_only_smid(){
+    g++ cacheblocking.cpp   -fopenmp -fopt-info-optimized -march=native -O3
+    ./a.out
+}
 
 
-cacheBlocking_only
+cacheBlocking_only_smid
