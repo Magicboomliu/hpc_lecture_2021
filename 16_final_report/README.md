@@ -62,7 +62,7 @@ mpirun -n 4 ./a.out
 cacheBlocking_openmp_mpi_smid
 
 ```   
-### Modified the last line to use different techniques. and then `sh try.sh`  
+### Modified the last line to use different techniques. and then *sh try.sh*  
 
 
 ## **Analysis**  
