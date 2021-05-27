@@ -82,4 +82,4 @@ The matrix size N is set to 256, I also check some great model performance to se
 | Cuda shared| 256 |0.000016  | **48.82** |**0.00687** |     
   
 
-  ### So the Best Codes I  choose is the CPU method: **CacheBlocking +openmp+MPI+SIMD**  with a Glops of **68.99**, which file is `cache_blocking_openmp_mpi_simd.cpp`.   And the GPU-based Method: **Cuda shared** iwth a Glops of 48.82, which file is `cuda_shared.cu`
+  ### So the Best Codes I  choose is the CPU method: **CacheBlocking +openmp+MPI+SIMD**  with a Glops of **68.99**, which file is `cache_blocking_openmp_mpi_simd.cpp`.   And the GPU-based Method: **Cuda shared** with a Glops of 48.82, which file is `cuda_shared.cu`
