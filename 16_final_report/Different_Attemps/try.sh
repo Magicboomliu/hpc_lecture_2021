@@ -17,4 +17,15 @@ cuda_only(){
 nvcc cuda_only.cu
 ./a.out
 }
-cuda_only
+
+cacheBlocking_openmp(){
+    g++ cacheblocking.cpp  -fopenmp
+    ./a.out
+}
+cacheBlocking_only(){
+    g++ cacheblocking.cpp  
+    ./a.out
+}
+
+
+cacheBlocking_only
