@@ -1,5 +1,6 @@
 # hpc_lecture
-
+## Liu Zihua 
+## 20M18350
 |          | Topic                                | Sample code               |
 | -------- | ------------------------------------ | ------------------------- |
 | Class 1  | Introduction to parallel programming |                           |
