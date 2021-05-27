@@ -69,6 +69,7 @@ int main(int argc, char** argv) {
 
         for (int i=0; i<mc; i++) {
           for (int j=0; j<nc; j++) {
+  #pragma omp atomic
             C[(i+ic)*N+j+jc] += Cc[i*nc+j];
           }
         }

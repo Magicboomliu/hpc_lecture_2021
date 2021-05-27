@@ -1,4 +1,3 @@
-
 openmp_only(){
 g++  openmp_only.cpp -fopenmp  
 ./a.out
@@ -17,7 +16,11 @@ cuda_only(){
 nvcc cuda_only.cu
 ./a.out
 }
+cuda_shareBlocking(){
+nvcc cuda_shared.cu  
+./a.out
 
+}
 cacheBlocking_openmp(){
     g++ cacheblocking.cpp  -fopenmp
     ./a.out
@@ -30,6 +33,10 @@ cacheBlocking_only_smid(){
     g++ cacheblocking.cpp   -fopenmp -fopt-info-optimized -march=native -O3
     ./a.out
 }
+cacheBlocking_openmp_mpi_smid(){
+mpicxx -fopenmp -march=native -O3 cache_blocking_openmp_mpi_simd.cpp 
+mpirun -n 4 ./a.out
+}
 
-
-cacheBlocking_only_smid
+## Here to select the function you like 
+cuda_shareBlocking
