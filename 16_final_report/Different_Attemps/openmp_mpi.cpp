@@ -7,23 +7,29 @@ using namespace std;
 
 int main(int argc, char** argv) {
   int size, rank;
+
+  // This part is for initalization
   MPI_Init(&argc, &argv);
   MPI_Comm_size(MPI_COMM_WORLD, &size);
   MPI_Comm_rank(MPI_COMM_WORLD, &rank);
 
-  const int N = 256;
+
+ // This parit is to generate A  matrix
+  const int N = 256;   // Size is 16 by 16
   vector<float> A(N*N);
   vector<float> B(N*N);
   vector<float> C(N*N, 0);
   vector<float> subA(N*N/size);
   vector<float> subB(N*N/size);
   vector<float> subC(N*N/size, 0);
+// Given random Value to Matrix A and Matrix B
   for (int i=0; i<N; i++) {
     for (int j=0; j<N; j++) {
       A[N*i+j] = drand48();
       B[N*i+j] = drand48();
     }
   }
+  // Using MPI for subA and SubB
   int offset = N/size*rank;
   for (int i=0; i<N/size; i++)
     for (int j=0; j<N; j++)
@@ -31,17 +37,27 @@ int main(int argc, char** argv) {
   for (int i=0; i<N; i++)
     for (int j=0; j<N/size; j++)
       subB[N/size*i+j] = B[N*i+j+offset];
+  
+  // data change in subAB and AB
   int recv_from = (rank + 1) % size;
   int send_to = (rank - 1 + size) % size;
 
   double comp_time = 0, comm_time = 0;
+
   for(int irank=0; irank<size; irank++) {
     auto tic = chrono::steady_clock::now();
     offset = N/size*((rank+irank) % size);
+
+    // Calcuate the subC using OpenMP Here
+    #pragma omp parallel for shared(subC)
     for (int i=0; i<N/size; i++)
+    #pragma omp parallel for shared(subC)
       for (int j=0; j<N/size; j++)
+    #pragma omp parallel for shared(subC)
         for (int k=0; k<N; k++)
           subC[N*i+j+offset] += subA[N*i+k] * subB[N/size*k+j];
+    
+    
     auto toc = chrono::steady_clock::now();
     comp_time += chrono::duration<double>(toc - tic).count();
     MPI_Request request[2];
@@ -52,14 +68,18 @@ int main(int argc, char** argv) {
     comm_time += chrono::duration<double>(tic - toc).count();
   }
   MPI_Allgather(&subC[0], N*N/size, MPI_FLOAT, &C[0], N*N/size, MPI_FLOAT, MPI_COMM_WORLD);
+  // Calauate C
   for (int i=0; i<N; i++)
     for (int j=0; j<N; j++)
       for (int k=0; k<N; k++)
         C[N*i+j] -= A[N*i+k] * B[N*k+j];
+  
   double err = 0;
   for (int i=0; i<N; i++)
     for (int j=0; j<N; j++)
       err += fabs(C[N*i+j]);
+  
+  // Get the time 
   if(rank==0) {
     double time = comp_time+comm_time;
     printf("N    : %d\n",N);
