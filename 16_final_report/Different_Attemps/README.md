@@ -33,11 +33,20 @@ mpicxx openmp_mpi_simd.cpp -fopenmp -fopt-info-optimized -march=native -O3
 ./a.out
 }
 cuda_only(){
-nvcc cuda_only.cu
+module load cuda
+nvcc cuda_only.cu -std=c++11
 ./a.out
 }
 cuda_shareBlocking(){
-nvcc cuda_shared.cu  
+module load cuda
+nvcc cuda_shared.cu -std=c++11 
+./a.out
+
+}
+cuda_mpi(){
+module load cuda
+module load openmpii  
+nvcc cuda_mpi_.cu -std=c++11 
 ./a.out
 
 }
@@ -58,9 +67,10 @@ mpicxx -fopenmp -march=native -O3 cache_blocking_openmp_mpi_simd.cpp
 mpirun -n 4 ./a.out
 }
 
-## Change This Line
-cacheBlocking_openmp_mpi_smid
-
+## Here to select the function you like
+#module load cuda
+#moudle load openmpi 
+cuda_shareBlocking
 ```   
 ### Modified the last line to use different techniques.   
 
