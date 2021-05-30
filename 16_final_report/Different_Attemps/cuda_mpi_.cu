@@ -57,14 +57,14 @@ int main(int argc, char** argv) {
       subB[N/size*i+j] = B[N*i+j+offset];
   cudaMemcpy(a,subA,N*N/size*sizeof(float),cudaMemcpyHostToDevice);
   cudaMemcpy(b,subB,N*N/size*sizeof(float),cudaMemcpyHostToDevice);
-  matrix<<<(N/size+M-1)/M,M>>>(a,b,c,N,offset,size);
+  
   int recv_from = (rank + 1) % size;
   int send_to = (rank - 1 + size) % size;
   double comp_time = 0, comm_time = 0;
   for(int irank=0; irank<size; irank++) {
     auto tic = chrono::steady_clock::now();
     offset = N/size*((rank+irank) % size);
- 
+    matrix<<<(N/size+M-1)/M,M>>>(a,b,c,N,offset,size);
     cudaDeviceSynchronize();
 
     auto toc = chrono::steady_clock::now();
