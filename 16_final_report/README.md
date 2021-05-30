@@ -33,11 +33,20 @@ mpicxx openmp_mpi_simd.cpp -fopenmp -fopt-info-optimized -march=native -O3
 ./a.out
 }
 cuda_only(){
-nvcc cuda_only.cu
+module load cuda
+nvcc cuda_only.cu -std=c++11
 ./a.out
 }
 cuda_shareBlocking(){
-nvcc cuda_shared.cu  
+module load cuda
+nvcc cuda_shared.cu -std=c++11 
+./a.out
+
+}
+cuda_mpi(){
+module load cuda
+module load openmpii  
+nvcc cuda_mpi_.cu -std=c++11 
 ./a.out
 
 }
@@ -58,12 +67,12 @@ mpicxx -fopenmp -march=native -O3 cache_blocking_openmp_mpi_simd.cpp
 mpirun -n 4 ./a.out
 }
 
-## Change This Line
-cacheBlocking_openmp_mpi_smid
-
+## Here to select the function you like
+#module load cuda
+#moudle load openmpi 
+cuda_shareBlocking
 ```   
-### Modified the last line to use different techniques. and then *sh try.sh*  
-
+### Modified the last line to use different techniques.   
 
 ## **Analysis**  
 The matrix size N is set to 256, I also check some great model performance to set N size to 4096.  
@@ -79,9 +88,8 @@ The matrix size N is set to 256, I also check some great model performance to se
 | CacheBlocking openmp | 256 |0.000012  | 2.43 |0.013798 |
 | CacheBlocking +openmp+MPI+SIMD | 4096 |0.000701  | **68.99** |1.87 |
 | Cuda only| 256 |0.000012  | 1.55 |0.0216 |
-| Cuda shared| 256 |0.000016  | **48.82** |**0.00687** |     
+| Cuda shared| 256 |0.000016  | **48.82** |**0.00687** |
 | Cuda MpI| 256 |0.000016  | 10.60 |**0.01324** |  
   
 
   ### So the Best Codes I  choose is the CPU method: **CacheBlocking +openmp+MPI+SIMD**  with a Glops of **68.99**, which file is `cache_blocking_openmp_mpi_simd.cpp`.   And the GPU-based Method: **Cuda shared** iwth a Glops of 48.82, which file is `cuda_shared.cu`, because the cuda+mpi version is not so efficent in one GPU, I do not use it.
-
